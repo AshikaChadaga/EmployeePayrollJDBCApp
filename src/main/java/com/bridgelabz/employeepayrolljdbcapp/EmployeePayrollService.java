@@ -2,6 +2,7 @@ package com.bridgelabz.employeepayrolljdbcapp;
 
 import java.util.List;
 import java.util.Scanner;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class EmployeePayrollService {
@@ -9,15 +10,11 @@ public class EmployeePayrollService {
 	public enum IOService {
 		CONSOLE_IO, FILE_IO, DB_IO, REST_IO
 	}
-
-	private List<EmployeePayrollData> employeePayrollList;
-
+	
 	public EmployeePayrollService() {
 	}
 
-	public EmployeePayrollService(List<EmployeePayrollData> employeePayrollList) {
-		this.employeePayrollList = employeePayrollList;
-	}
+	private List<EmployeePayrollData> employeePayrollList;
 	
 	private void readEmployeePayrollData(Scanner consoleInputReader) {
 		
@@ -28,7 +25,11 @@ public class EmployeePayrollService {
 		System.out.println("Enter the Employee Salary : ");
 		double salary = consoleInputReader.nextDouble();
 		
-		employeePayrollList.add(new EmployeePayrollData(id, name, salary));
+		employeePayrollList.add(new EmployeePayrollData(id, name, salary, LocalDate.now()));
+	}
+
+	public EmployeePayrollService(List<EmployeePayrollData> employeePayrollList) {
+		this.employeePayrollList = employeePayrollList;
 	}
 	
 	public void writeEmployeePayrollData(IOService ioService) {
@@ -50,8 +51,7 @@ public class EmployeePayrollService {
 		
 		return 0;
 	}
-	
-	
+		
 	public long readDataFromFile(IOService fileIo) {
 		
 		List<String> employeePayrollFromFile = new ArrayList<String>();
@@ -61,6 +61,14 @@ public class EmployeePayrollService {
 			
 		}
 		return employeePayrollFromFile.size();
+	}
+	
+	public List<EmployeePayrollData> readEmployeePayrollData(IOService ioService) {
+		
+		if(ioService.equals(IOService.DB_IO))
+			this.employeePayrollList = new EmployeePayrollDBService().readData();
+		return this.employeePayrollList;
+		
 	}
 	
 	public static void main(String[] args) {
@@ -73,7 +81,5 @@ public class EmployeePayrollService {
 		employeePayrollService.readEmployeePayrollData(consoleInputReader);
 		employeePayrollService.writeEmployeePayrollData(IOService.CONSOLE_IO);		
 	}
-
-
 
 }
