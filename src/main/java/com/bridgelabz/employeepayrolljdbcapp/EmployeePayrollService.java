@@ -2,7 +2,6 @@ package com.bridgelabz.employeepayrolljdbcapp;
 
 import java.util.List;
 import java.util.Scanner;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class EmployeePayrollService {
@@ -25,7 +24,7 @@ public class EmployeePayrollService {
 		System.out.println("Enter the Employee Salary : ");
 		double salary = consoleInputReader.nextDouble();
 		
-		employeePayrollList.add(new EmployeePayrollData(id, name, salary, LocalDate.now()));
+		employeePayrollList.add(new EmployeePayrollData(id, name, salary));
 	}
 
 	public EmployeePayrollService(List<EmployeePayrollData> employeePayrollList) {

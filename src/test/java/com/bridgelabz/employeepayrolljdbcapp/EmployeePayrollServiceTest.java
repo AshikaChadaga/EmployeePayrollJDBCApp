@@ -1,6 +1,5 @@
 package com.bridgelabz.employeepayrolljdbcapp;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,9 +15,9 @@ public class EmployeePayrollServiceTest
 	public void given3Employees_WhenWrittenToFile_ShouldMatchEmployeeEntries()
 	{
 		EmployeePayrollData[] arrayOfEmployees = {
-				new EmployeePayrollData(1, "Jeff Bezos", 100000.0, LocalDate.now()),
-				new EmployeePayrollData(2, "Bill Gates", 200000.0, LocalDate.now()),
-				new EmployeePayrollData(3, "Mark Zuckerberg", 300000.0, LocalDate.now())
+				new EmployeePayrollData(1, "Jeff Bezos", 100000.0),
+				new EmployeePayrollData(2, "Bill Gates", 200000.0),
+				new EmployeePayrollData(3, "Mark Zuckerberg", 300000.0)
 		};
 		EmployeePayrollService employeePayrollService;
 		employeePayrollService = new EmployeePayrollService(Arrays.asList(arrayOfEmployees));
