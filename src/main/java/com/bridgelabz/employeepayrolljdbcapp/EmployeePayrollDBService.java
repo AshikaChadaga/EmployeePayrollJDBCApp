@@ -2,7 +2,10 @@ package com.bridgelabz.employeepayrolljdbcapp;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +31,16 @@ public class EmployeePayrollDBService {
 		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
 				
 		try (Connection connection = getConnection();){
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sqlStatement);
+			
+			while(resultSet.next()) {
+				int id = resultSet.getInt("employee_id");
+				String name = resultSet.getString("employee_name");
+				double basicSalary = resultSet.getDouble("basic_salary");
+				LocalDate startDate = resultSet.getDate("start_date").toLocalDate();
+				employeePayrollList.add(new EmployeePayrollData(id, name, basicSalary, startDate));
+			}
 		}
 		catch(SQLException e){
 			e.printStackTrace();
