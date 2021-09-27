@@ -66,6 +66,15 @@ public class EmployeePayrollService {
 		return employeePayrollFromFile.size();
 	}
 	
+	public void writeEmployeePayrollData(IOService ioService) {
+		
+		if(ioService.equals(IOService.CONSOLE_IO))
+			System.out.println("\nWriting Employee Payroll Roster to Console\n" + employeePayrollList);
+		
+		else if(ioService.equals(IOService.FILE_IO))
+			new EmployeePayrollFileIOService().writeData(employeePayrollList);
+	}	
+	
 	public List<EmployeePayrollData> readEmployeePayrollData(IOService ioService) {
 		
 		try {
@@ -77,16 +86,7 @@ public class EmployeePayrollService {
 			throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not excecute the query! Check the Syntax");
 		}
 		
-	}	
-	
-	public void writeEmployeePayrollData(IOService ioService) {
-		
-		if(ioService.equals(IOService.CONSOLE_IO))
-			System.out.println("\nWriting Employee Payroll Roster to Console\n" + employeePayrollList);
-		
-		else if(ioService.equals(IOService.FILE_IO))
-			new EmployeePayrollFileIOService().writeData(employeePayrollList);
-	}	
+	}
 	
 	public void updateEmployeeSalary(String name, double salary) {
 		
