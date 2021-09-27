@@ -46,6 +46,18 @@ public class EmployeePayrollServiceTest
 	}
 	
 	@Test 
+	public void givenNewSalaryForEmployee_WhenUpdatedUsingStatement_ShouldSyncWithDB() {
+		
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
+		employeePayrollService.updateEmployeeSalaryUsingStatement("Rosa Diaz", 10000000.00);
+		
+		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Rosa Diaz");
+		Assert.assertTrue(result);
+		
+	}
+	
+	@Test 
 	public void givenNewSalaryForEmployee_WhenUpdated_ShouldSyncWithDB() {
 		
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
