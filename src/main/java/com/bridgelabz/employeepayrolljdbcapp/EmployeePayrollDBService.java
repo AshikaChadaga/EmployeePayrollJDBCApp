@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bridgelabz.employeepayrolljdbcapp.EmployeePayrollException.ExceptionType;
+
 public class EmployeePayrollDBService {
 	
 	private PreparedStatement employeePayrollDataStatement;
@@ -27,7 +29,7 @@ public class EmployeePayrollDBService {
 
 	private Connection getConnection() throws SQLException {
 		
-		String jdbcURL = "jdbc:mysql://localhost:3306/employeepayroll_service?useSSL=false";
+		String jdbcURL = "jdbc:mysql://localhost:3306/wrongDatabase?useSSL=false";
 		String userName = "root";
 		String password = "Bridgelabz@1234";
 		Connection connection;
@@ -53,7 +55,7 @@ public class EmployeePayrollDBService {
 			}
 		}
 		catch(SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(ExceptionType.CONNECTION_FAIL, "Could not connect to the Database");
 		}
 		return employeePayrollList;
 		
@@ -83,23 +85,6 @@ public class EmployeePayrollDBService {
 		}
 	}
 	
-	public List<EmployeePayrollData> getEmployeePayrollData(String name) {
-		
-		List<EmployeePayrollData> employeePayrollList = null;
-		if(this.employeePayrollDataStatement == null)
-			this.preparedStatementForEmployeeData();
-		try {
-			employeePayrollDataStatement.setString(1,name);
-			ResultSet resultSet = employeePayrollDataStatement.executeQuery();
-			employeePayrollList = this.getEmployeePayrollData(resultSet);	
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return employeePayrollList;
-	}
-
-	
 	public List<EmployeePayrollData> readData(){
 		
 		String sqlStatement = "SELECT * FROM employee_payroll;";
@@ -111,7 +96,23 @@ public class EmployeePayrollDBService {
 			employeePayrollList = this.getEmployeePayrollData(resultSet);
 		}
 		catch(SQLException e){
-			e.printStackTrace();
+			throw new EmployeePayrollException(ExceptionType.CONNECTION_FAIL, "Could not connect to the Database");
+		}
+		return employeePayrollList;
+	}
+	
+	public List<EmployeePayrollData> getEmployeePayrollData(String name) {
+		
+		List<EmployeePayrollData> employeePayrollList = null;
+		if(this.employeePayrollDataStatement == null)
+			this.preparedStatementForEmployeeData();
+		try {
+			employeePayrollDataStatement.setString(1,name);
+			ResultSet resultSet = employeePayrollDataStatement.executeQuery();
+			employeePayrollList = this.getEmployeePayrollData(resultSet);	
+		}
+		catch(SQLException e) {
+			throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
 		}
 		return employeePayrollList;
 	}
@@ -119,9 +120,7 @@ public class EmployeePayrollDBService {
 	public int updateEmployeeData(String name, double salary) {
 		
 		return this.updateEmployeeDataUsingStatement(name,salary);
-	}
-	
-	
+	}	
 
 	public int updateEmployeeDataUsingStatement(String name, double salary) {
 		
@@ -132,9 +131,8 @@ public class EmployeePayrollDBService {
 			return statement.executeUpdate(sqlStatement);
 		}
 		catch(SQLException e){
-			e.printStackTrace();
-		}		
-		return 0;
+			throw new EmployeePayrollException(ExceptionType.UPDATE_FAILED, "Could not update to the Database");
+		}
 	}
 	
 	public List<EmployeePayrollData> getEmployeeDetailsBasedOnNameUsingStatement(String name) {
@@ -148,7 +146,7 @@ public class EmployeePayrollDBService {
 			employeePayrollList = this.getEmployeePayrollData(resultSet);
 		}
 		catch(SQLException e){
-			e.printStackTrace();
+			throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
 		}
 		return employeePayrollList;
 		
@@ -165,7 +163,7 @@ public class EmployeePayrollDBService {
 			employeePayrollList = this.getEmployeePayrollData(resultSet);
 		}
 		catch(SQLException e){
-			e.printStackTrace();
+			throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
 		}
 		return employeePayrollList;
 	}
@@ -184,7 +182,7 @@ public class EmployeePayrollDBService {
 			}
 		}
 		catch(SQLException e){
-			e.printStackTrace();
+			throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
 		}
 		return sumOfSalaryBasedOnGender;
 	}
@@ -203,7 +201,7 @@ public class EmployeePayrollDBService {
 			}
 		}
 		catch(SQLException e){
-			e.printStackTrace();
+			throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
 		}
 		return averageOfSalaryBasedOnGender;
 	}
@@ -222,7 +220,8 @@ public class EmployeePayrollDBService {
 			}
 		}
 		catch(SQLException e){
-			e.printStackTrace();
+			throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
+
 		}
 		return MinimumSalaryBasedOnGender;
 	}
@@ -241,7 +240,8 @@ public class EmployeePayrollDBService {
 			}
 		}
 		catch(SQLException e){
-			e.printStackTrace();
+			throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
+
 		}
 		return MaximumSalaryBasedOnGender;
 	}
@@ -260,7 +260,8 @@ public class EmployeePayrollDBService {
 			}
 		}
 		catch(SQLException e){
-			e.printStackTrace();
+			throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
+
 		}
 		return CountBasedOnGender;
 	}	
@@ -276,7 +277,8 @@ public class EmployeePayrollDBService {
 			employeePayrollList = this.getEmployeePayrollData(resultSet);	
 		}
 		catch(SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
+
 		}
 		return employeePayrollList;
 	}

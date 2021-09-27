@@ -3,6 +3,8 @@ package com.bridgelabz.employeepayrolljdbcapp;
 import java.util.List;
 import java.util.Scanner;
 
+import com.bridgelabz.employeepayrolljdbcapp.EmployeePayrollException.ExceptionType;
+
 import java.util.ArrayList;
 
 public class EmployeePayrollService {
@@ -66,13 +68,19 @@ public class EmployeePayrollService {
 	
 	public List<EmployeePayrollData> readEmployeePayrollData(IOService ioService) {
 		
-		if(ioService.equals(IOService.DB_IO))
-			this.employeePayrollList = employeePayrollDBService.readData();
-		return this.employeePayrollList;
+		try {
+			if (ioService.equals(IOService.DB_IO))
+				this.employeePayrollList = employeePayrollDBService.readData();
+			return this.employeePayrollList;
+		} 
+		catch (EmployeePayrollException e) {
+			throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not excecute the query! Check the Syntax");
+		}
 		
 	}	
 	
 	public void writeEmployeePayrollData(IOService ioService) {
+		
 		if(ioService.equals(IOService.CONSOLE_IO))
 			System.out.println("\nWriting Employee Payroll Roster to Console\n" + employeePayrollList);
 		
