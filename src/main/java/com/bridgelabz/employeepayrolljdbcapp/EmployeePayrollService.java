@@ -92,6 +92,17 @@ public class EmployeePayrollService {
 		if(employeePayrollData != null)
 			employeePayrollData.employeeSalary = salary;
 		
+	}	
+
+	public void updateEmployeeSalaryUsingStatement(String name, double salary) {
+		
+		int result = employeePayrollDBService.updateEmployeeDataUsingStatement(name,salary);
+		if(result == 0) 
+			return;
+		
+		EmployeePayrollData employeePayrollData = this.getEmployeePayrollData(name);
+		if(employeePayrollData != null)
+			employeePayrollData.employeeSalary = salary;		
 	}
 	
 	public boolean checkEmployeePayrollInSyncWithDB(String name) {
@@ -162,6 +173,5 @@ public class EmployeePayrollService {
 		employeePayrollService.readEmployeePayrollData(consoleInputReader);
 		employeePayrollService.writeEmployeePayrollData(IOService.CONSOLE_IO);		
 	}
-
 
 }
