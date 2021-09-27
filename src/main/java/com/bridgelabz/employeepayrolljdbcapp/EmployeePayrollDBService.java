@@ -27,7 +27,7 @@ public class EmployeePayrollDBService {
 
 	private Connection getConnection() throws SQLException {
 		
-		String jdbcURL = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false";
+		String jdbcURL = "jdbc:mysql://localhost:3306/employeepayroll_service?useSSL=false";
 		String userName = "root";
 		String password = "Bridgelabz@1234";
 		Connection connection;
@@ -38,150 +38,25 @@ public class EmployeePayrollDBService {
 		
 		return connection;
 	}
-
 	
-	public List<EmployeePayrollData> readData(){
+	private List<EmployeePayrollData> getEmployeePayrollData(ResultSet resultSet) {
 		
-		String sqlStatement = "SELECT employee.employee_id, employee_name, basic_salary, start_date FROM employee JOIN employee_payroll ON employee.employee_id = employee_payroll.employee_id;";
 		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
-				
-		try (Connection connection = getConnection();){
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(sqlStatement);
-			employeePayrollList = this.getEmployeePayrollData(resultSet);
-		}
-		catch(SQLException e){
-			e.printStackTrace();
-		}
-		return employeePayrollList;
-	}
-	
-	public List<EmployeePayrollData> getEmployeeDetailsBasedOnNameUsingStatement(String name) {
 		
-		String sqlStatement = String.format("SELECT * FROM employee JOIN employee_payroll ON employee.employee_id = employee_payroll.employee_id WHERE employee_name = '%s';",name);
-		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
-				
-		try (Connection connection = getConnection();){
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(sqlStatement);
-			employeePayrollList = this.getEmployeePayrollData(resultSet);
+		try {
+			while(resultSet.next()) {
+				int id = resultSet.getInt("id");
+				String name = resultSet.getString("name");
+				double basicSalary = resultSet.getDouble("salary");
+				LocalDate startDate = resultSet.getDate("start").toLocalDate();
+				employeePayrollList.add(new EmployeePayrollData(id, name, basicSalary, startDate));
+			}
 		}
-		catch(SQLException e){
+		catch(SQLException e) {
 			e.printStackTrace();
 		}
 		return employeePayrollList;
 		
-	}
-	
-	public List<EmployeePayrollData> getEmployeeDetailsBasedOnStartDateUsingStatement(String startDate) {
-		
-		String sqlStatement = String.format("SELECT * FROM employee JOIN employee_payroll ON employee.employee_id = employee_payroll.employee_id WHERE start_date BETWEEN CAST('%s' AS DATE) AND DATE(NOW());",startDate);
-		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
-				
-		try (Connection connection = getConnection();){
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(sqlStatement);
-			employeePayrollList = this.getEmployeePayrollData(resultSet);
-		}
-		catch(SQLException e){
-			e.printStackTrace();
-		}
-		return employeePayrollList;
-	}
-	
-	public List<Double> getSumOfSalaryBasedOnGenderUsingStatement() {
-		
-		String sqlStatement = "SELECT gender, SUM(basic_salary) AS TotalSalary FROM employee JOIN employee_payroll ON employee.employee_id = employee_payroll.employee_id GROUP BY gender";
-		List<Double> sumOfSalaryBasedOnGender = new ArrayList<>();
-				
-		try (Connection connection = getConnection();){
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(sqlStatement);
-			while(resultSet.next()) {
-				double salary = resultSet.getDouble("TotalSalary");
-				sumOfSalaryBasedOnGender.add(salary);
-			}
-		}
-		catch(SQLException e){
-			e.printStackTrace();
-		}
-		return sumOfSalaryBasedOnGender;
-	}
-	
-	public List<Double> getAverageOfSalaryBasedOnGenderUsingStatement() {
-		
-		String sqlStatement = "SELECT gender, AVG(basic_salary) AS AverageSalary FROM employee JOIN employee_payroll ON employee.employee_id = employee_payroll.employee_id GROUP BY gender";
-		List<Double> averageOfSalaryBasedOnGender = new ArrayList<>();
-				
-		try (Connection connection = getConnection();){
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(sqlStatement);
-			while(resultSet.next()) {
-				double salary = resultSet.getDouble("AverageSalary");
-				averageOfSalaryBasedOnGender.add(salary);
-			}
-		}
-		catch(SQLException e){
-			e.printStackTrace();
-		}
-		return averageOfSalaryBasedOnGender;
-	}
-	
-	public List<Double> getMinimumSalaryBasedOnGenderUsingStatement() {
-		
-		String sqlStatement = "SELECT gender, MIN(basic_salary) AS MimimumSalary FROM employee JOIN employee_payroll ON employee.employee_id = employee_payroll.employee_id GROUP BY gender";
-		List<Double> MinimumSalaryBasedOnGender = new ArrayList<>();
-				
-		try (Connection connection = getConnection();){
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(sqlStatement);
-			while(resultSet.next()) {
-				double salary = resultSet.getDouble("MimimumSalary");
-				MinimumSalaryBasedOnGender.add(salary);
-			}
-		}
-		catch(SQLException e){
-			e.printStackTrace();
-		}
-		return MinimumSalaryBasedOnGender;
-	}
-	
-	public List<Double> getMaximumSalaryBasedOnGenderUsingStatement() {
-		
-		String sqlStatement = "SELECT gender, MAX(basic_salary) AS MaximumSalary FROM employee JOIN employee_payroll ON employee.employee_id = employee_payroll.employee_id GROUP BY gender";
-		List<Double> MaximumSalaryBasedOnGender = new ArrayList<>();
-				
-		try (Connection connection = getConnection();){
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(sqlStatement);
-			while(resultSet.next()) {
-				double salary = resultSet.getDouble("MaximumSalary");
-				MaximumSalaryBasedOnGender.add(salary);
-			}
-		}
-		catch(SQLException e){
-			e.printStackTrace();
-		}
-		return MaximumSalaryBasedOnGender;
-	}
-	
-	public List<Integer> getCountOfEmployeesBasedOnGenderUsingStatement() {
-		
-		String sqlStatement = "SELECT gender, COUNT(basic_salary) AS CountBasedOnGender FROM employee JOIN employee_payroll ON employee.employee_id = employee_payroll.employee_id GROUP BY gender";
-		List<Integer> CountBasedOnGender = new ArrayList<>();
-				
-		try (Connection connection = getConnection();){
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(sqlStatement);
-			while(resultSet.next()) {
-				int salary = resultSet.getInt("CountBasedOnGender");
-				CountBasedOnGender.add(salary);
-			}
-		}
-		catch(SQLException e){
-			e.printStackTrace();
-		}
-		return CountBasedOnGender;
 	}
 	
 	public List<EmployeePayrollData> getEmployeePayrollData(String name) {
@@ -200,31 +75,156 @@ public class EmployeePayrollDBService {
 		return employeePayrollList;
 	}
 
-	private List<EmployeePayrollData> getEmployeePayrollData(ResultSet resultSet) {
+	
+	public List<EmployeePayrollData> readData(){
 		
+		String sqlStatement = "SELECT * FROM employee_payroll;";
 		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
-		
-		try {
-			while(resultSet.next()) {
-				int id = resultSet.getInt("employee_id");
-				String name = resultSet.getString("employee_name");
-				double basicSalary = resultSet.getDouble("basic_salary");
-				LocalDate startDate = resultSet.getDate("start_date").toLocalDate();
-				employeePayrollList.add(new EmployeePayrollData(id, name, basicSalary, startDate));
-			}
+				
+		try (Connection connection = getConnection();){
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sqlStatement);
+			employeePayrollList = this.getEmployeePayrollData(resultSet);
 		}
-		catch(SQLException e) {
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return employeePayrollList;
+	}
+	
+	public List<EmployeePayrollData> getEmployeeDetailsBasedOnNameUsingStatement(String name) {
+		
+		String sqlStatement = String.format("SELECT * FROM employee_payroll WHERE name = '%s';",name);
+		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
+				
+		try (Connection connection = getConnection();){
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sqlStatement);
+			employeePayrollList = this.getEmployeePayrollData(resultSet);
+		}
+		catch(SQLException e){
 			e.printStackTrace();
 		}
 		return employeePayrollList;
 		
+	}
+	
+	public List<EmployeePayrollData> getEmployeeDetailsBasedOnStartDateUsingStatement(String startDate) {
+		
+		String sqlStatement = String.format("SELECT * FROM employee_payroll WHERE start BETWEEN CAST('%s' AS DATE) AND DATE(NOW());",startDate);
+		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
+				
+		try (Connection connection = getConnection();){
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sqlStatement);
+			employeePayrollList = this.getEmployeePayrollData(resultSet);
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return employeePayrollList;
+	}
+	
+	public List<Double> getSumOfSalaryBasedOnGenderUsingStatement() {
+		
+		String sqlStatement = "SELECT gender, SUM(salary) AS TotalSalary FROM employee_payroll GROUP BY gender;";
+		List<Double> sumOfSalaryBasedOnGender = new ArrayList<>();
+				
+		try (Connection connection = getConnection();){
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sqlStatement);
+			while(resultSet.next()) {
+				double salary = resultSet.getDouble("TotalSalary");
+				sumOfSalaryBasedOnGender.add(salary);
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return sumOfSalaryBasedOnGender;
+	}
+	
+	public List<Double> getAverageOfSalaryBasedOnGenderUsingStatement() {
+		
+		String sqlStatement = "SELECT gender, AVG(salary) AS AverageSalary FROM employee_payroll GROUP BY gender;";
+		List<Double> averageOfSalaryBasedOnGender = new ArrayList<>();
+				
+		try (Connection connection = getConnection();){
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sqlStatement);
+			while(resultSet.next()) {
+				double salary = resultSet.getDouble("AverageSalary");
+				averageOfSalaryBasedOnGender.add(salary);
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return averageOfSalaryBasedOnGender;
+	}
+	
+	public List<Double> getMinimumSalaryBasedOnGenderUsingStatement() {
+		
+		String sqlStatement = "SELECT gender, MIN(salary) AS MinimumSalary FROM employee_payroll GROUP BY gender;";
+		List<Double> MinimumSalaryBasedOnGender = new ArrayList<>();
+				
+		try (Connection connection = getConnection();){
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sqlStatement);
+			while(resultSet.next()) {
+				double salary = resultSet.getDouble("MinimumSalary");
+				MinimumSalaryBasedOnGender.add(salary);
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return MinimumSalaryBasedOnGender;
+	}
+	
+	public List<Double> getMaximumSalaryBasedOnGenderUsingStatement() {
+		
+		String sqlStatement = "SELECT gender, MAX(salary) AS MaximumSalary FROM employee_payroll GROUP BY gender;";
+		List<Double> MaximumSalaryBasedOnGender = new ArrayList<>();
+				
+		try (Connection connection = getConnection();){
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sqlStatement);
+			while(resultSet.next()) {
+				double salary = resultSet.getDouble("MaximumSalary");
+				MaximumSalaryBasedOnGender.add(salary);
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return MaximumSalaryBasedOnGender;
+	}
+	
+	public List<Integer> getCountOfEmployeesBasedOnGenderUsingStatement() {
+		
+		String sqlStatement = "SELECT gender, COUNT(gender) AS CountBasedOnGender FROM employee_payroll GROUP BY gender;";
+		List<Integer> CountBasedOnGender = new ArrayList<>();
+				
+		try (Connection connection = getConnection();){
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sqlStatement);
+			while(resultSet.next()) {
+				int count = resultSet.getInt("CountBasedOnGender");
+				CountBasedOnGender.add(count);
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return CountBasedOnGender;
 	}
 
 	private void prepareStatementForEmployeeData() {
 		
 		try {
 			Connection connection = this.getConnection();
-			String sqlStatement = "SELECT * FROM employee JOIN employee_payroll ON employee.employee_id = employee_payroll.employee_id WHERE employee_name = ?;";
+			String sqlStatement = "SELECT * FROM employee_payroll WHERE name = ?;";
 			employeePayrollDataStatement = connection.prepareStatement(sqlStatement);
 		}
 		catch(SQLException e) {
@@ -239,7 +239,7 @@ public class EmployeePayrollDBService {
 
 	private int updateEmployeeDataUsingStatement(String name, double salary) {
 		
-		String sqlStatement = String.format("UPDATE employee_payroll SET basic_salary = %.2f WHERE employee_id IN (SELECT employee_id FROM employee WHERE employee_name = '%s');", salary, name);
+		String sqlStatement = String.format("UPDATE employee_payroll SET salary = %.2f WHERE name = '%s';", salary, name);
 		
 		try (Connection connection = getConnection()){
 			Statement statement = connection.createStatement();
@@ -250,13 +250,5 @@ public class EmployeePayrollDBService {
 		}		
 		return 0;
 	}
-
-	
-
-	
-
-	
-
-	
 	
 }

@@ -8,17 +8,32 @@ import com.mysql.fabric.xmlrpc.base.Array;
 import java.util.ArrayList;
 
 public class EmployeePayrollService {
+	
+	private List<EmployeePayrollData> employeePayrollList;
+	private EmployeePayrollDBService employeePayrollDBService;
 
 	public enum IOService {
 		CONSOLE_IO, FILE_IO, DB_IO, REST_IO
 	}
-	private EmployeePayrollDBService employeePayrollDBService;
 	
 	public EmployeePayrollService() {
 		employeePayrollDBService =  EmployeePayrollDBService.getInstance();
 	}
+	
+	public EmployeePayrollService(List<EmployeePayrollData> employeePayrollList) {
+		this();
+		this.employeePayrollList = employeePayrollList;
+	}
+	
+	public void printData(IOService fileIo) {
+		if(fileIo.equals(IOService.FILE_IO)) new EmployeePayrollFileIOService().printData();
+	}
 
-	private List<EmployeePayrollData> employeePayrollList;
+	public long countEntries(IOService fileIo) {
+		if(fileIo.equals(IOService.FILE_IO)) 
+			return new EmployeePayrollFileIOService().countEntries();
+		return 0;
+	}
 	
 	private void readEmployeePayrollData(Scanner consoleInputReader) {
 		
@@ -31,32 +46,15 @@ public class EmployeePayrollService {
 		
 		employeePayrollList.add(new EmployeePayrollData(id, name, salary));
 	}
-
-	public EmployeePayrollService(List<EmployeePayrollData> employeePayrollList) {
-		this();
-		this.employeePayrollList = employeePayrollList;
+	
+	private EmployeePayrollData getEmployeePayrollData(String name) {
+		
+		return this.employeePayrollList.stream()
+				.filter(EmployeePayrollDataItem -> EmployeePayrollDataItem.employeeName.equals(name))
+				.findFirst()
+				.orElse(null);
 	}
 	
-	public void writeEmployeePayrollData(IOService ioService) {
-		if(ioService.equals(IOService.CONSOLE_IO))
-			System.out.println("\nWriting Employee Payroll Roster to Console\n" + employeePayrollList);
-		
-		else if(ioService.equals(IOService.FILE_IO))
-			new EmployeePayrollFileIOService().writeData(employeePayrollList);
-	}
-	
-	public void printData(IOService fileIo) {
-		if(fileIo.equals(IOService.FILE_IO)) new EmployeePayrollFileIOService().printData();
-	}
-
-
-	public long countEntries(IOService fileIo) {
-		if(fileIo.equals(IOService.FILE_IO)) 
-			return new EmployeePayrollFileIOService().countEntries();
-		
-		return 0;
-	}
-		
 	public long readDataFromFile(IOService fileIo) {
 		
 		List<String> employeePayrollFromFile = new ArrayList<String>();
@@ -74,7 +72,15 @@ public class EmployeePayrollService {
 			this.employeePayrollList = employeePayrollDBService.readData();
 		return this.employeePayrollList;
 		
-	}
+	}	
+	
+	public void writeEmployeePayrollData(IOService ioService) {
+		if(ioService.equals(IOService.CONSOLE_IO))
+			System.out.println("\nWriting Employee Payroll Roster to Console\n" + employeePayrollList);
+		
+		else if(ioService.equals(IOService.FILE_IO))
+			new EmployeePayrollFileIOService().writeData(employeePayrollList);
+	}	
 	
 	public void updateEmployeeSalary(String name, double salary) {
 		
@@ -88,13 +94,6 @@ public class EmployeePayrollService {
 		
 	}
 	
-	private EmployeePayrollData getEmployeePayrollData(String name) {
-		
-		return this.employeePayrollList.stream()
-				.filter(EmployeePayrollDataItem -> EmployeePayrollDataItem.employeeName.equals(name))
-				.findFirst()
-				.orElse(null);
-	}
 	public boolean checkEmployeePayrollInSyncWithDB(String name) {
 		
 		List<EmployeePayrollData> employeePayrollDataList = employeePayrollDBService.getEmployeePayrollData(name);
