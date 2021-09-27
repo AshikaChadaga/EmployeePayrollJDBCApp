@@ -263,9 +263,7 @@ public class EmployeePayrollDBService {
 			e.printStackTrace();
 		}
 		return CountBasedOnGender;
-	}
-
-	
+	}	
 	
 	public List<EmployeePayrollData> getEmployeeDetailsBasedOnStartDateUsingPreparedStatement(String startDate) {
 		
