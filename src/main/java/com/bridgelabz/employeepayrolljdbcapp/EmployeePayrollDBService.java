@@ -236,8 +236,10 @@ public class EmployeePayrollDBService {
 		
 		return this.updateEmployeeDataUsingStatement(name,salary);
 	}
+	
+	
 
-	private int updateEmployeeDataUsingStatement(String name, double salary) {
+	public int updateEmployeeDataUsingStatement(String name, double salary) {
 		
 		String sqlStatement = String.format("UPDATE employee_payroll SET salary = %.2f WHERE name = '%s';", salary, name);
 		
