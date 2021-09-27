@@ -3,8 +3,6 @@ package com.bridgelabz.employeepayrolljdbcapp;
 import java.util.List;
 import java.util.Scanner;
 
-import com.mysql.fabric.xmlrpc.base.Array;
-
 import java.util.ArrayList;
 
 public class EmployeePayrollService {
