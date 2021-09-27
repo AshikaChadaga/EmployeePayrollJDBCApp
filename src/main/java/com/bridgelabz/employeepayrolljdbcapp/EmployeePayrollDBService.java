@@ -59,11 +59,35 @@ public class EmployeePayrollDBService {
 		
 	}
 	
+	private void preparedStatementForEmployeeData() {
+		
+		try {
+			Connection connection = this.getConnection();
+			String sqlStatement = "SELECT * FROM employee_payroll WHERE name = ?;";
+			employeePayrollDataStatement = connection.prepareStatement(sqlStatement);
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void preparedStatementForEmployeeDataBasedOnStartDate() {
+		
+		try {
+			Connection connection = this.getConnection();
+			String sqlStatement = "SELECT * FROM employee_payroll WHERE start BETWEEN CAST(? AS DATE) AND DATE(NOW());";
+			employeePayrollDataStatement = connection.prepareStatement(sqlStatement);
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public List<EmployeePayrollData> getEmployeePayrollData(String name) {
 		
 		List<EmployeePayrollData> employeePayrollList = null;
 		if(this.employeePayrollDataStatement == null)
-			this.prepareStatementForEmployeeData();
+			this.preparedStatementForEmployeeData();
 		try {
 			employeePayrollDataStatement.setString(1,name);
 			ResultSet resultSet = employeePayrollDataStatement.executeQuery();
@@ -90,6 +114,27 @@ public class EmployeePayrollDBService {
 			e.printStackTrace();
 		}
 		return employeePayrollList;
+	}
+	
+	public int updateEmployeeData(String name, double salary) {
+		
+		return this.updateEmployeeDataUsingStatement(name,salary);
+	}
+	
+	
+
+	public int updateEmployeeDataUsingStatement(String name, double salary) {
+		
+		String sqlStatement = String.format("UPDATE employee_payroll SET salary = %.2f WHERE name = '%s';", salary, name);
+		
+		try (Connection connection = getConnection()){
+			Statement statement = connection.createStatement();
+			return statement.executeUpdate(sqlStatement);
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}		
+		return 0;
 	}
 	
 	public List<EmployeePayrollData> getEmployeeDetailsBasedOnNameUsingStatement(String name) {
@@ -220,37 +265,22 @@ public class EmployeePayrollDBService {
 		return CountBasedOnGender;
 	}
 
-	private void prepareStatementForEmployeeData() {
+	
+	
+	public List<EmployeePayrollData> getEmployeeDetailsBasedOnStartDateUsingPreparedStatement(String startDate) {
 		
+		List<EmployeePayrollData> employeePayrollList = null;
+		if(this.employeePayrollDataStatement == null)
+			this.preparedStatementForEmployeeDataBasedOnStartDate();
 		try {
-			Connection connection = this.getConnection();
-			String sqlStatement = "SELECT * FROM employee_payroll WHERE name = ?;";
-			employeePayrollDataStatement = connection.prepareStatement(sqlStatement);
+			employeePayrollDataStatement.setString(1,startDate);
+			ResultSet resultSet = employeePayrollDataStatement.executeQuery();
+			employeePayrollList = this.getEmployeePayrollData(resultSet);	
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public int updateEmployeeData(String name, double salary) {
-		
-		return this.updateEmployeeDataUsingStatement(name,salary);
-	}
-	
-	
-
-	public int updateEmployeeDataUsingStatement(String name, double salary) {
-		
-		String sqlStatement = String.format("UPDATE employee_payroll SET salary = %.2f WHERE name = '%s';", salary, name);
-		
-		try (Connection connection = getConnection()){
-			Statement statement = connection.createStatement();
-			return statement.executeUpdate(sqlStatement);
-		}
-		catch(SQLException e){
-			e.printStackTrace();
-		}		
-		return 0;
+		return employeePayrollList;
 	}
 	
 }
