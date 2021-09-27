@@ -29,7 +29,7 @@ public class EmployeePayrollDBService {
 
 	private Connection getConnection() throws SQLException {
 		
-		String jdbcURL = "jdbc:mysql://localhost:3306/wrongDatabase?useSSL=false";
+		String jdbcURL = "jdbc:mysql://localhost:3306/employeepayroll_service?useSSL=false";
 		String userName = "root";
 		String password = "Bridgelabz@1234";
 		Connection connection;
