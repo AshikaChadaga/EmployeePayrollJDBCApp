@@ -107,7 +107,7 @@ public class EmployeePayrollServiceTest
 		
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<Double> expectedSalaryAverage = new ArrayList();
-		expectedSalaryAverage.add(7000000.00);
+		expectedSalaryAverage.add(10000000.00);
 		expectedSalaryAverage.add(2000000.00);
 		List<Double> averageOfSalaryBasedOnGender = employeePayrollService.getAverageOfSalaryBasedOnGender(IOService.DB_IO);
 		if(averageOfSalaryBasedOnGender.size() == 2) {
@@ -120,7 +120,7 @@ public class EmployeePayrollServiceTest
 		
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<Double> expectedMinimumSalary = new ArrayList();
-		expectedMinimumSalary.add(7000000.00);
+		expectedMinimumSalary.add(10000000.00);
 		expectedMinimumSalary.add(1000000.00);
 		List<Double> minimumSalaryBasedOnGender = employeePayrollService.getMinimumSalaryBasedOnGender(IOService.DB_IO);
 		if(minimumSalaryBasedOnGender.size() == 2) {
@@ -133,7 +133,7 @@ public class EmployeePayrollServiceTest
 		
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<Double> expectedMaximumSalary = new ArrayList();
-		expectedMaximumSalary.add(7000000.00);
+		expectedMaximumSalary.add(10000000.00);
 		expectedMaximumSalary.add(3000000.00);
 		List<Double> maximumSalaryBasedOnGender = employeePayrollService.getMaximumSalaryBasedOnGender(IOService.DB_IO);
 		if(maximumSalaryBasedOnGender.size() == 2) {
@@ -153,4 +153,15 @@ public class EmployeePayrollServiceTest
 			Assert.assertEquals(expectedCountBasedOnGender, countBasedOnGender);
 		}
 	}
+	
+	@Test
+	public void givenStartDateRange_WhenMatchesUsingPreparedStatement_ShouldReturnEmployeeDetails() {
+		
+		String startDate = "2010-01-01";
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		List<EmployeePayrollData> employeePayrollData = employeePayrollService.getEmployeeDetailsBasedOnStartDateUsingPreparedStatement(IOService.DB_IO, startDate);
+		Assert.assertEquals(3, employeePayrollData.size());
+	}
+	
+	
 }
