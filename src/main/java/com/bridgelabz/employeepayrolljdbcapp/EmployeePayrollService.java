@@ -123,6 +123,13 @@ public class EmployeePayrollService {
 		return this.employeePayrollList;
 	}
 	
+	public List<EmployeePayrollData> getEmployeeDetailsBasedOnStartDateUsingPreparedStatement(IOService ioService, String startDate) {
+		
+		if(ioService.equals(IOService.DB_IO))
+			this.employeePayrollList = employeePayrollDBService.getEmployeeDetailsBasedOnStartDateUsingPreparedStatement(startDate);
+		return this.employeePayrollList;
+	}
+	
 	public List<Double> getSumOfSalaryBasedOnGender(IOService ioService) {
 		
 		List<Double> sumOfSalaryBasedOnGender = new ArrayList<Double>();
@@ -173,5 +180,7 @@ public class EmployeePayrollService {
 		employeePayrollService.readEmployeePayrollData(consoleInputReader);
 		employeePayrollService.writeEmployeePayrollData(IOService.CONSOLE_IO);		
 	}
+
+	
 
 }
