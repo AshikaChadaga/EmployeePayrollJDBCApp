@@ -1,5 +1,7 @@
 package com.bridgelabz.employeepayrolljdbcapp;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -81,10 +83,12 @@ public class EmployeePayrollServiceTest
 	@Test
 	public void givenStartDateRange_WhenMatches_ShouldReturnEmployeeDetails() {
 		
-		String startDate = "2013-01-01";
+		
+		LocalDate startDate = LocalDate.of(2011, 01, 01);
+		LocalDate endDate = LocalDate.of(2021, 01, 01);
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		List<EmployeePayrollData> employeePayrollData = employeePayrollService.getEmployeeDetailsBasedOnStartDate(IOService.DB_IO, startDate);
-		Assert.assertEquals(2, employeePayrollData.size());
+		List<EmployeePayrollData> employeePayrollData = employeePayrollService.getEmployeeDetailsBasedOnStartDate(IOService.DB_IO, startDate, endDate);
+		Assert.assertEquals(3, employeePayrollData.size());
 	}
 	
 	@Test
@@ -156,10 +160,11 @@ public class EmployeePayrollServiceTest
 	@Test
 	public void givenStartDateRange_WhenMatchesUsingPreparedStatement_ShouldReturnEmployeeDetails() {
 		
-		String startDate = "2010-01-01";
+		String startDate = "2013-01-01";
+		String endDate = "2021-01-01";
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		List<EmployeePayrollData> employeePayrollData = employeePayrollService.getEmployeeDetailsBasedOnStartDateUsingPreparedStatement(IOService.DB_IO, startDate);
-		Assert.assertEquals(3, employeePayrollData.size());
+		List<EmployeePayrollData> employeePayrollData = employeePayrollService.getEmployeeDetailsBasedOnStartDateUsingPreparedStatement(IOService.DB_IO, startDate, endDate);
+		Assert.assertEquals(2, employeePayrollData.size());
 	}
 	
 }
