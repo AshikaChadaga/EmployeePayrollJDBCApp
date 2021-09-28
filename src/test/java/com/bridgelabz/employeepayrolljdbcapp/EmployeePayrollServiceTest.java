@@ -178,4 +178,15 @@ public class EmployeePayrollServiceTest
 		Assert.assertTrue(result);
 	}
 	
+	@Test
+	public void givenNewEmployee_WhenAdded_ShouldSyncWithUpdatedDB() {
+		
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
+		employeePayrollService.addEmployeeToUpdatedDatabse("Mark", 5000000.00, LocalDate.now(), "M");
+		
+		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Mark");
+		Assert.assertTrue(result);
+	}
+	
 }
