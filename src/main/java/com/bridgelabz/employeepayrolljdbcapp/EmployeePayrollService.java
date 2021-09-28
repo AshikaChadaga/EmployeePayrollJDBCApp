@@ -181,6 +181,11 @@ public class EmployeePayrollService {
 
 		employeePayrollList.add(employeePayrollDBService.addEmployeeToPayroll(name, salary, start, gender));
 	}
+	
+	public void addEmployeeToUpdatedDatabse(String name, double salary, LocalDate start, String gender) {
+
+		employeePayrollList.add(employeePayrollDBService.addEmployeeToUpdatedDatabase(name, salary, start, gender));
+	}
 
 	public static void main(String[] args) {
 		
