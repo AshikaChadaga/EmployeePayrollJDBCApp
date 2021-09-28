@@ -30,7 +30,7 @@ public class EmployeePayrollDBService {
 
 	private Connection getConnection() throws SQLException {
 		
-		String jdbcURL = "jdbc:mysql://localhost:3306/employeepayroll_service?useSSL=false";
+		String jdbcURL = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false";
 		String userName = "root";
 		String password = "Bridgelabz@1234";
 		Connection connection;
@@ -48,10 +48,10 @@ public class EmployeePayrollDBService {
 		
 		try {
 			while(resultSet.next()) {
-				int id = resultSet.getInt("id");
-				String name = resultSet.getString("name");
-				double basicSalary = resultSet.getDouble("salary");
-				LocalDate startDate = resultSet.getDate("start").toLocalDate();
+				int id = resultSet.getInt("employee_id");
+				String name = resultSet.getString("employee_name");
+				double basicSalary = resultSet.getDouble("basic_salary");
+				LocalDate startDate = resultSet.getDate("start_date").toLocalDate();
 				employeePayrollList.add(new EmployeePayrollData(id, name, basicSalary, startDate));
 			}
 		}
@@ -60,6 +60,28 @@ public class EmployeePayrollDBService {
 		}
 		return employeePayrollList;
 		
+	}
+	
+	public List<EmployeePayrollData> getEmployeePayrollData(String name) {
+		
+		List<EmployeePayrollData> employeePayrollList = null;
+		if(this.employeePayrollDataStatement == null)
+			this.preparedStatementForEmployeeData();
+		try {
+			employeePayrollDataStatement.setString(1,name);
+			ResultSet resultSet = employeePayrollDataStatement.executeQuery();
+			employeePayrollList = this.getEmployeePayrollData(resultSet);	
+		}
+		catch(SQLException exception) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.DATABASE_EXCEPTION, exception.getMessage());
+		}
+		return employeePayrollList;
+	}
+	
+	public List<EmployeePayrollData> readData(){
+		
+		String sqlStatement = "SELECT * FROM employee JOIN employee_payroll ON employee.employee_id = employee_payroll.employee_id;";
+		return this.getEmployeePayrollDataUsingDB(sqlStatement);
 	}
 	
 	private void preparedStatementForEmployeeData() {
@@ -100,34 +122,14 @@ public class EmployeePayrollDBService {
 		}
 		return employeePayrollList;
 	}
-	public List<EmployeePayrollData> readData(){
-		
-		String sqlStatement = "SELECT * FROM employee_payroll;";
-		return this.getEmployeePayrollDataUsingDB(sqlStatement);
-	}
 	
-	public List<EmployeePayrollData> getEmployeePayrollData(String name) {
-		
-		List<EmployeePayrollData> employeePayrollList = null;
-		if(this.employeePayrollDataStatement == null)
-			this.preparedStatementForEmployeeData();
-		try {
-			employeePayrollDataStatement.setString(1,name);
-			ResultSet resultSet = employeePayrollDataStatement.executeQuery();
-			employeePayrollList = this.getEmployeePayrollData(resultSet);	
-		}
-		catch(SQLException exception) {
-			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.DATABASE_EXCEPTION, exception.getMessage());
-		}
-		return employeePayrollList;
-	}
 	
 	public int updateEmployeeData(String name, double salary) {
 		
 		return this.updateEmployeeDataUsingStatement(name,salary);
 	}	
 
-	public int updateEmployeeDataUsingStatement(String name, double salary) {
+	private int updateEmployeeDataUsingStatement(String name, double salary) {
 		
 		String sqlStatement = String.format("UPDATE employee_payroll SET salary = %.2f WHERE name = '%s';", salary, name);
 		
