@@ -95,6 +95,7 @@ public class EmployeePayrollData {
 		if(object == null || getClass() != object.getClass())
 			return false;
 		EmployeePayrollData that = (EmployeePayrollData) object;
-		return employeeId == that.employeeId && Double.compare(that.payrollDetails.basicSalary,  payrollDetails.basicSalary) == 0 && employeeName.equals(that.employeeName);
+		return employeeId == that.employeeId;
 	}
+	
 }
