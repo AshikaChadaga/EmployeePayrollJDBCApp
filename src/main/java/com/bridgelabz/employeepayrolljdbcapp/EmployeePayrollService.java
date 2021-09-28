@@ -51,7 +51,7 @@ public class EmployeePayrollService {
 	private EmployeePayrollData getEmployeePayrollData(String name) {
 		
 		return this.employeePayrollList.stream()
-				.filter(EmployeePayrollDataItem -> EmployeePayrollDataItem.employeeName.equals(name))
+				.filter(EmployeePayrollDataItem -> EmployeePayrollDataItem.getEmployeeName().equals(name))
 				.findFirst()
 				.orElse(null);
 	}
@@ -177,14 +177,14 @@ public class EmployeePayrollService {
 		return countBasedOnGender;
 	}
 	
-	public void addEmployeeToPayroll(String name, double salary, LocalDate start, String gender) {
+	public void addEmployeeToPayroll(int id, String name, double salary, long phoneNumber, LocalDate start, String gender, int companyId) {
 
-		employeePayrollList.add(employeePayrollDBService.addEmployeeToPayroll(name, salary, start, gender));
+		employeePayrollList.add(employeePayrollDBService.addEmployeeToPayroll(id, name, salary, phoneNumber, start, gender, companyId));
 	}
 	
-	public void addEmployeeToUpdatedDatabse(String name, double salary, LocalDate start, String gender) {
+	public void addEmployeeToUpdatedDatabse(int id, String name, double salary, long phoneNumber, LocalDate start, String gender, int companyId) {
 
-		employeePayrollList.add(employeePayrollDBService.addEmployeeToUpdatedDatabase(name, salary, start, gender));
+		employeePayrollList.add(employeePayrollDBService.addEmployeeToUpdatedDatabase(id, name, salary, phoneNumber, start, gender, companyId));
 	}
 
 	public static void main(String[] args) {
@@ -195,8 +195,9 @@ public class EmployeePayrollService {
 		Scanner consoleInputReader = new Scanner(System.in);
 		
 		employeePayrollService.readEmployeePayrollData(consoleInputReader);
-		employeePayrollService.writeEmployeePayrollData(IOService.CONSOLE_IO);		
+		employeePayrollService.writeEmployeePayrollData(IOService.CONSOLE_IO);
 	}
+
 
 	
 }
