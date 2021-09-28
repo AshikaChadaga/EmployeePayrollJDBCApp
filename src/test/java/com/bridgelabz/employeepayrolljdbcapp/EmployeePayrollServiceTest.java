@@ -51,7 +51,7 @@ public class EmployeePayrollServiceTest
 		
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
-		employeePayrollService.updateEmployeeSalaryUsingStatement("Rosa Diaz", 10000000.00);
+		employeePayrollService.updateEmployeeSalaryUsingStatement("Rosa Diaz", 7000000.00);
 		
 		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Rosa Diaz");
 		Assert.assertTrue(result);
@@ -63,7 +63,7 @@ public class EmployeePayrollServiceTest
 		
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
-		employeePayrollService.updateEmployeeSalary("Rosa Diaz", 7000000.00);
+		employeePayrollService.updateEmployeeSalary("Rosa Diaz", 10000000.00);
 		
 		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Rosa Diaz");
 		Assert.assertTrue(result);
@@ -84,11 +84,11 @@ public class EmployeePayrollServiceTest
 	public void givenStartDateRange_WhenMatches_ShouldReturnEmployeeDetails() {
 		
 		
-		LocalDate startDate = LocalDate.of(2011, 01, 01);
+		LocalDate startDate = LocalDate.of(2013, 01, 01);
 		LocalDate endDate = LocalDate.of(2021, 01, 01);
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<EmployeePayrollData> employeePayrollData = employeePayrollService.getEmployeeDetailsBasedOnStartDate(IOService.DB_IO, startDate, endDate);
-		Assert.assertEquals(3, employeePayrollData.size());
+		Assert.assertEquals(6, employeePayrollData.size());
 	}
 	
 	@Test
@@ -96,8 +96,8 @@ public class EmployeePayrollServiceTest
 		
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<Double> expectedSalarySum = new ArrayList();
-		expectedSalarySum.add(7000000.00);
-		expectedSalarySum.add(4000000.00);
+		expectedSalarySum.add(26000000.00);
+		expectedSalarySum.add(30000000.00);
 		List<Double> sumOfSalaryBasedOnGender = employeePayrollService.getSumOfSalaryBasedOnGender(IOService.DB_IO);
 		if(sumOfSalaryBasedOnGender.size() == 2) {
 			Assert.assertEquals(expectedSalarySum, sumOfSalaryBasedOnGender);
@@ -110,8 +110,8 @@ public class EmployeePayrollServiceTest
 		
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<Double> expectedSalaryAverage = new ArrayList();
-		expectedSalaryAverage.add(10000000.00);
-		expectedSalaryAverage.add(2000000.00);
+		expectedSalaryAverage.add(6500000.00);
+		expectedSalaryAverage.add(5000000.00);
 		List<Double> averageOfSalaryBasedOnGender = employeePayrollService.getAverageOfSalaryBasedOnGender(IOService.DB_IO);
 		if(averageOfSalaryBasedOnGender.size() == 2) {
 			Assert.assertEquals(expectedSalaryAverage, averageOfSalaryBasedOnGender);
@@ -123,7 +123,7 @@ public class EmployeePayrollServiceTest
 		
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<Double> expectedMinimumSalary = new ArrayList();
-		expectedMinimumSalary.add(10000000.00);
+		expectedMinimumSalary.add(4000000.00);
 		expectedMinimumSalary.add(1000000.00);
 		List<Double> minimumSalaryBasedOnGender = employeePayrollService.getMinimumSalaryBasedOnGender(IOService.DB_IO);
 		if(minimumSalaryBasedOnGender.size() == 2) {
@@ -137,7 +137,7 @@ public class EmployeePayrollServiceTest
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<Double> expectedMaximumSalary = new ArrayList();
 		expectedMaximumSalary.add(10000000.00);
-		expectedMaximumSalary.add(3000000.00);
+		expectedMaximumSalary.add(9000000.00);
 		List<Double> maximumSalaryBasedOnGender = employeePayrollService.getMaximumSalaryBasedOnGender(IOService.DB_IO);
 		if(maximumSalaryBasedOnGender.size() == 2) {
 			Assert.assertEquals(expectedMaximumSalary, maximumSalaryBasedOnGender);
@@ -149,8 +149,8 @@ public class EmployeePayrollServiceTest
 		
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<Integer> expectedCountBasedOnGender = new ArrayList();
-		expectedCountBasedOnGender.add(1);
-		expectedCountBasedOnGender.add(2);
+		expectedCountBasedOnGender.add(4);
+		expectedCountBasedOnGender.add(6);
 		List<Integer> countBasedOnGender = employeePayrollService.getCountOfEmployeesBasedOnGender(IOService.DB_IO);
 		if(countBasedOnGender.size() == 2) {
 			Assert.assertEquals(expectedCountBasedOnGender, countBasedOnGender);
@@ -164,7 +164,7 @@ public class EmployeePayrollServiceTest
 		String endDate = "2021-01-01";
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<EmployeePayrollData> employeePayrollData = employeePayrollService.getEmployeeDetailsBasedOnStartDateUsingPreparedStatement(IOService.DB_IO, startDate, endDate);
-		Assert.assertEquals(2, employeePayrollData.size());
+		Assert.assertEquals(6, employeePayrollData.size());
 	}
 	
 	@Test
@@ -172,10 +172,9 @@ public class EmployeePayrollServiceTest
 		
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
-		employeePayrollService.addEmployeeToPayroll("Mark", 5000000.00, LocalDate.now(), "M");
-		
-		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Mark");
-		Assert.assertTrue(result);
+		employeePayrollService.addEmployeeToPayroll(11, "Mark", 5000000.00, 1234567890, LocalDate.now(), "M", 1);
+		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
+		Assert.assertEquals(10, employeePayrollData.size());
 	}
 	
 	@Test
@@ -183,10 +182,10 @@ public class EmployeePayrollServiceTest
 		
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
-		employeePayrollService.addEmployeeToUpdatedDatabse("Mark", 5000000.00, LocalDate.now(), "M");
+		employeePayrollService.addEmployeeToUpdatedDatabse(12, "Macy", 6000000.00, 1334567890, LocalDate.now(), "F", 2);
+		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
+		Assert.assertEquals(11, employeePayrollData.size());
 		
-		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Mark");
-		Assert.assertTrue(result);
 	}
 	
 }
