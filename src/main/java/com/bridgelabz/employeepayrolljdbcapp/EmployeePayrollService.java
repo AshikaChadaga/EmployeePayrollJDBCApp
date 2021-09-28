@@ -176,6 +176,11 @@ public class EmployeePayrollService {
 			countBasedOnGender = employeePayrollDBService.getCountOfEmployeesBasedOnGenderUsingStatement();
 		return countBasedOnGender;
 	}
+	
+	public void addEmployeeToPayroll(String name, double salary, LocalDate start, String gender) {
+
+		employeePayrollList.add(employeePayrollDBService.addEmployeeToPayroll(name, salary, start, gender));
+	}
 
 	public static void main(String[] args) {
 		
@@ -187,4 +192,6 @@ public class EmployeePayrollService {
 		employeePayrollService.readEmployeePayrollData(consoleInputReader);
 		employeePayrollService.writeEmployeePayrollData(IOService.CONSOLE_IO);		
 	}
+
+	
 }
