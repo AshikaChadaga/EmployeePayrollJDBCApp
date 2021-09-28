@@ -167,4 +167,15 @@ public class EmployeePayrollServiceTest
 		Assert.assertEquals(2, employeePayrollData.size());
 	}
 	
+	@Test
+	public void givenNewEmployee_WhenAdded_ShouldSyncWithDB() {
+		
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
+		employeePayrollService.addEmployeeToPayroll("Mark", 5000000.00, LocalDate.now(), "M");
+		
+		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Mark");
+		Assert.assertTrue(result);
+	}
+	
 }
