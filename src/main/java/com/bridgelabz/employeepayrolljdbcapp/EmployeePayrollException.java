@@ -1,15 +1,20 @@
 package com.bridgelabz.employeepayrolljdbcapp;
 
 public class EmployeePayrollException extends RuntimeException {
+	
+	enum ExceptionType {
+		DATABASE_EXCEPTION, 
+		UPDATE_FAILED, 
+		CONNECTION_FAILED, 
+		RESOURCES_NOT_CLOSED_EXCEPTION, 
+		COMMIT_FAILED
+	}
 
-    enum ExceptionType {
-        CONNECTION_FAIL, CANNOT_EXECUTE_QUERY, UPDATE_FAILED
-    }
+	public ExceptionType type;
 
-    ExceptionType exceptionType;
+	public EmployeePayrollException(ExceptionType type, String message) {
+		super(message);
+		this.type = type;
+	}
 
-    public EmployeePayrollException(ExceptionType exceptionType, String message) {
-        super(message);
-        this.exceptionType = exceptionType;
-    }
 }
