@@ -83,8 +83,8 @@ public class EmployeePayrollService {
 				this.employeePayrollList = employeePayrollDBService.readData();
 			return this.employeePayrollList;
 		} 
-		catch (EmployeePayrollException e) {
-			throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not excecute the query! Check the Syntax");
+		catch (EmployeePayrollException exception) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.DATABASE_EXCEPTION, exception.getMessage());
 		}
 		
 	}
