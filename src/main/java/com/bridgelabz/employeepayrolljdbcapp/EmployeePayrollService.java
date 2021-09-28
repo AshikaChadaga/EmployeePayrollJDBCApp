@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import com.bridgelabz.employeepayrolljdbcapp.EmployeePayrollException.ExceptionType;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class EmployeePayrollService {
@@ -123,16 +124,16 @@ public class EmployeePayrollService {
 		return this.employeePayrollList;
 	}
 	
-	public List<EmployeePayrollData> getEmployeeDetailsBasedOnStartDate(IOService ioService, String startDate) {
+	public List<EmployeePayrollData> getEmployeeDetailsBasedOnStartDate(IOService ioService, LocalDate startDate, LocalDate endDate) {
 		if(ioService.equals(IOService.DB_IO))
-			this.employeePayrollList = employeePayrollDBService.getEmployeeDetailsBasedOnStartDateUsingStatement(startDate);
+			this.employeePayrollList = employeePayrollDBService.getEmployeeDetailsBasedOnStartDateUsingStatement(startDate, endDate);
 		return this.employeePayrollList;
 	}
 	
-	public List<EmployeePayrollData> getEmployeeDetailsBasedOnStartDateUsingPreparedStatement(IOService ioService, String startDate) {
+	public List<EmployeePayrollData> getEmployeeDetailsBasedOnStartDateUsingPreparedStatement(IOService ioService, String startDate, String endDate) {
 		
 		if(ioService.equals(IOService.DB_IO))
-			this.employeePayrollList = employeePayrollDBService.getEmployeeDetailsBasedOnStartDateUsingPreparedStatement(startDate);
+			this.employeePayrollList = employeePayrollDBService.getEmployeeDetailsBasedOnStartDateUsingPreparedStatement(startDate, endDate);
 		return this.employeePayrollList;
 	}
 	
