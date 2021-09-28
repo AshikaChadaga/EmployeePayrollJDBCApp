@@ -77,7 +77,7 @@ public class EmployeePayrollDBService {
 		
 		try {
 			Connection connection = this.getConnection();
-			String sqlStatement = "SELECT * FROM employee_payroll WHERE start BETWEEN CAST(? AS DATE) AND DATE(NOW());";
+			String sqlStatement = "SELECT * FROM employee_payroll WHERE start BETWEEN ? AND ?;";
 			employeePayrollDataStatement = connection.prepareStatement(sqlStatement);
 		}
 		catch(SQLException e) {
@@ -85,11 +85,10 @@ public class EmployeePayrollDBService {
 		}
 	}
 	
-	public List<EmployeePayrollData> readData(){
+	private List<EmployeePayrollData> getEmployeePayrollDataUsingDB (String sqlStatement) {
 		
-		String sqlStatement = "SELECT * FROM employee_payroll;";
 		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
-				
+		
 		try (Connection connection = getConnection();){
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery(sqlStatement);
@@ -99,6 +98,11 @@ public class EmployeePayrollDBService {
 			throw new EmployeePayrollException(ExceptionType.CONNECTION_FAIL, "Could not connect to the Database");
 		}
 		return employeePayrollList;
+	}
+	public List<EmployeePayrollData> readData(){
+		
+		String sqlStatement = "SELECT * FROM employee_payroll;";
+		return this.getEmployeePayrollDataUsingDB(sqlStatement);
 	}
 	
 	public List<EmployeePayrollData> getEmployeePayrollData(String name) {
@@ -152,9 +156,9 @@ public class EmployeePayrollDBService {
 		
 	}
 	
-	public List<EmployeePayrollData> getEmployeeDetailsBasedOnStartDateUsingStatement(String startDate) {
+	public List<EmployeePayrollData> getEmployeeDetailsBasedOnStartDateUsingStatement(LocalDate startDate, LocalDate endDate) {
 		
-		String sqlStatement = String.format("SELECT * FROM employee_payroll WHERE start BETWEEN CAST('%s' AS DATE) AND DATE(NOW());",startDate);
+		String sqlStatement = String.format("SELECT * FROM employee_payroll WHERE start BETWEEN '%s' AND '%s';",startDate, endDate);
 		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
 				
 		try (Connection connection = getConnection();){
@@ -266,13 +270,14 @@ public class EmployeePayrollDBService {
 		return CountBasedOnGender;
 	}	
 	
-	public List<EmployeePayrollData> getEmployeeDetailsBasedOnStartDateUsingPreparedStatement(String startDate) {
+	public List<EmployeePayrollData> getEmployeeDetailsBasedOnStartDateUsingPreparedStatement(String startDate, String endDate) {
 		
 		List<EmployeePayrollData> employeePayrollList = null;
 		if(this.employeePayrollDataStatement == null)
 			this.preparedStatementForEmployeeDataBasedOnStartDate();
 		try {
 			employeePayrollDataStatement.setString(1,startDate);
+			employeePayrollDataStatement.setString(2,endDate);
 			ResultSet resultSet = employeePayrollDataStatement.executeQuery();
 			employeePayrollList = this.getEmployeePayrollData(resultSet);	
 		}
