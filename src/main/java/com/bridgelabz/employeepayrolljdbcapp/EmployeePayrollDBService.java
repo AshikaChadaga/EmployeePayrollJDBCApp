@@ -55,8 +55,8 @@ public class EmployeePayrollDBService {
 				employeePayrollList.add(new EmployeePayrollData(id, name, basicSalary, startDate));
 			}
 		}
-		catch(SQLException e) {
-			throw new EmployeePayrollException(ExceptionType.CONNECTION_FAIL, "Could not connect to the Database");
+		catch(SQLException exception) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.DATABASE_EXCEPTION, exception.getMessage());
 		}
 		return employeePayrollList;
 		
@@ -69,8 +69,8 @@ public class EmployeePayrollDBService {
 			String sqlStatement = "SELECT * FROM employee_payroll WHERE name = ?;";
 			employeePayrollDataStatement = connection.prepareStatement(sqlStatement);
 		}
-		catch(SQLException e) {
-			e.printStackTrace();
+		catch(SQLException exception) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.DATABASE_EXCEPTION, exception.getMessage());
 		}
 	}
 	
@@ -81,8 +81,8 @@ public class EmployeePayrollDBService {
 			String sqlStatement = "SELECT * FROM employee_payroll WHERE start BETWEEN ? AND ?;";
 			employeePayrollDataStatement = connection.prepareStatement(sqlStatement);
 		}
-		catch(SQLException e) {
-			e.printStackTrace();
+		catch(SQLException exception) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.DATABASE_EXCEPTION, exception.getMessage());
 		}
 	}
 	
@@ -95,8 +95,8 @@ public class EmployeePayrollDBService {
 			ResultSet resultSet = statement.executeQuery(sqlStatement);
 			employeePayrollList = this.getEmployeePayrollData(resultSet);
 		}
-		catch(SQLException e){
-			throw new EmployeePayrollException(ExceptionType.CONNECTION_FAIL, "Could not connect to the Database");
+		catch(SQLException exception){
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.DATABASE_EXCEPTION, exception.getMessage());
 		}
 		return employeePayrollList;
 	}
@@ -116,8 +116,8 @@ public class EmployeePayrollDBService {
 			ResultSet resultSet = employeePayrollDataStatement.executeQuery();
 			employeePayrollList = this.getEmployeePayrollData(resultSet);	
 		}
-		catch(SQLException e) {
-			throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
+		catch(SQLException exception) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.DATABASE_EXCEPTION, exception.getMessage());
 		}
 		return employeePayrollList;
 	}
@@ -135,8 +135,8 @@ public class EmployeePayrollDBService {
 			Statement statement = connection.createStatement();
 			return statement.executeUpdate(sqlStatement);
 		}
-		catch(SQLException e){
-			throw new EmployeePayrollException(ExceptionType.UPDATE_FAILED, "Could not update to the Database");
+		catch(SQLException exception){
+			throw new EmployeePayrollException(ExceptionType.UPDATE_FAILED, exception.getMessage());
 		}
 	}
 	
@@ -150,8 +150,8 @@ public class EmployeePayrollDBService {
 			ResultSet resultSet = statement.executeQuery(sqlStatement);
 			employeePayrollList = this.getEmployeePayrollData(resultSet);
 		}
-		catch(SQLException e){
-			throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
+		catch(SQLException exception){
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.DATABASE_EXCEPTION, exception.getMessage());
 		}
 		return employeePayrollList;
 		
@@ -167,8 +167,8 @@ public class EmployeePayrollDBService {
 			ResultSet resultSet = statement.executeQuery(sqlStatement);
 			employeePayrollList = this.getEmployeePayrollData(resultSet);
 		}
-		catch(SQLException e){
-			throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
+		catch(SQLException exception){
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.DATABASE_EXCEPTION, exception.getMessage());
 		}
 		return employeePayrollList;
 	}
@@ -186,8 +186,8 @@ public class EmployeePayrollDBService {
 				sumOfSalaryBasedOnGender.add(salary);
 			}
 		}
-		catch(SQLException e){
-			throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
+		catch(SQLException exception){
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.DATABASE_EXCEPTION, exception.getMessage());
 		}
 		return sumOfSalaryBasedOnGender;
 	}
@@ -205,8 +205,8 @@ public class EmployeePayrollDBService {
 				averageOfSalaryBasedOnGender.add(salary);
 			}
 		}
-		catch(SQLException e){
-			throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
+		catch(SQLException exception){
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.DATABASE_EXCEPTION, exception.getMessage());
 		}
 		return averageOfSalaryBasedOnGender;
 	}
@@ -224,8 +224,8 @@ public class EmployeePayrollDBService {
 				MinimumSalaryBasedOnGender.add(salary);
 			}
 		}
-		catch(SQLException e){
-			throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
+		catch(SQLException exception){
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.DATABASE_EXCEPTION, exception.getMessage());
 
 		}
 		return MinimumSalaryBasedOnGender;
@@ -244,9 +244,8 @@ public class EmployeePayrollDBService {
 				MaximumSalaryBasedOnGender.add(salary);
 			}
 		}
-		catch(SQLException e){
-			throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
-
+		catch(SQLException exception){
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.DATABASE_EXCEPTION, exception.getMessage());
 		}
 		return MaximumSalaryBasedOnGender;
 	}
@@ -264,9 +263,8 @@ public class EmployeePayrollDBService {
 				CountBasedOnGender.add(count);
 			}
 		}
-		catch(SQLException e){
-			throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
-
+		catch(SQLException exception){
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.DATABASE_EXCEPTION, exception.getMessage());
 		}
 		return CountBasedOnGender;
 	}	
@@ -282,9 +280,8 @@ public class EmployeePayrollDBService {
 			ResultSet resultSet = employeePayrollDataStatement.executeQuery();
 			employeePayrollList = this.getEmployeePayrollData(resultSet);	
 		}
-		catch(SQLException e) {
-			throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
-
+		catch(SQLException exception) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.DATABASE_EXCEPTION, exception.getMessage());
 		}
 		return employeePayrollList;
 	}
@@ -306,8 +303,8 @@ public class EmployeePayrollDBService {
 			}
 			employeePayrollData = new EmployeePayrollData(employeeId, name, salary, startDate);
 		}
-		catch(SQLException e) {
-			e.printStackTrace();
+		catch(SQLException exception) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.DATABASE_EXCEPTION, exception.getMessage());
 		}
 		
 		return employeePayrollData;
@@ -322,10 +319,10 @@ public class EmployeePayrollDBService {
 		
 		try {
 			connection = this.getConnection();
+			connection.setAutoCommit(false);
 		}
-		catch(SQLException e) {
-			e.printStackTrace();
-			throw new EmployeePayrollException(ExceptionType.CONNECTION_FAIL, "Could not connect to the Database");
+		catch(SQLException exception) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.DATABASE_EXCEPTION, exception.getMessage());
 		}
 		try (Statement statement = connection.createStatement()){
 			
@@ -340,7 +337,12 @@ public class EmployeePayrollDBService {
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
-			throw new EmployeePayrollException(ExceptionType.UPDATE_FAILED, "Could not Insert into Database !");
+			try {
+				connection.rollback();
+				return employeePayrollData;
+			} catch (SQLException exception) {
+				throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.CONNECTION_FAILED, exception.getMessage());
+			}
 		}
 		
 		try(Statement statement = connection.createStatement()){
@@ -357,9 +359,27 @@ public class EmployeePayrollDBService {
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
-			throw new EmployeePayrollException(ExceptionType.CONNECTION_FAIL, "Could not connect to the Database");
+			try {
+				connection.rollback();
+			} catch (SQLException exception) {
+				throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.CONNECTION_FAILED, exception.getMessage());
+			}
 		}
 		
+		try {
+			connection.commit();
+		} catch (SQLException e) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.COMMIT_FAILED, e.getMessage());
+		}
+		finally {
+			if(connection != null)
+				try {
+					connection.close();
+				} 
+			catch (SQLException e) {
+				throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.RESOURCES_NOT_CLOSED_EXCEPTION, e.getMessage());
+			}
+		}
 		return employeePayrollData;
 	}
 	
