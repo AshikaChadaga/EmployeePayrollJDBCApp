@@ -1,18 +1,24 @@
 package com.bridgelabz.employeepayrolljdbcapp;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EmployeePayrollData {
+	
 	public int employeeId;
 	public String employeeName;
-	public double employeeSalary;
 	public LocalDate startDate;
-	
+	public PayrollDetails payrollDetails = new PayrollDetails();
+	public CompanyDetails companyDetails = new CompanyDetails();
+	public List<Department> departmentList = new ArrayList<Department>();
+	public Address address = new Address();
+
 	public EmployeePayrollData(Integer id, String name, Double salary) {
 		
 		this.employeeId = id;
 		this.employeeName = name;
-		this.employeeSalary = salary;
+		this.payrollDetails.setBasicSalary(salary);
 	}
 	
 	public EmployeePayrollData(Integer id, String name, Double salary, LocalDate startDate) {
@@ -20,10 +26,66 @@ public class EmployeePayrollData {
 		this.startDate = startDate;
 	}
 	
+	public PayrollDetails getPayrollDetails() {
+		return payrollDetails;
+	}
+
+	public void setPayrollDetails(PayrollDetails payrollDetails) {
+		this.payrollDetails = payrollDetails;
+	}
+	
+	public CompanyDetails getCompanyDetails() {
+		return companyDetails;
+	}
+
+	public void setCompanyDetails(CompanyDetails companyDetails) {
+		this.companyDetails = companyDetails;
+	}
+	
+	public int getEmployeeId() {
+		return employeeId;
+	}
+
+	public String getEmployeeName() {
+		return employeeName;
+	}
+
+	public LocalDate getStartDate() {
+		return startDate;
+	}
+
+	public List<Department> getDepartment() {
+		return departmentList;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setEmployeeId(int employeeId) {
+		this.employeeId = employeeId;
+	}
+
+	public void setEmployeeName(String employeeName) {
+		this.employeeName = employeeName;
+	}
+
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = startDate;
+	}
+
+	public void setDepartment(List<Department> department) {
+		this.departmentList = department;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+	
 	@Override
 	public String toString() {
 		
-		return "EmployeeId: "+employeeId+", EmployeeName: "+employeeName+", EmployeeSalary: "+employeeSalary;
+		return "EmployeeId: "+employeeId+", EmployeeName: "+employeeName+", EmployeeSalary: "+payrollDetails.basicSalary;
 	}
 	
 	@Override
@@ -33,6 +95,6 @@ public class EmployeePayrollData {
 		if(object == null || getClass() != object.getClass())
 			return false;
 		EmployeePayrollData that = (EmployeePayrollData) object;
-		return employeeId == that.employeeId && Double.compare(that.employeeSalary,  employeeSalary) == 0 && employeeName.equals(that.employeeName);
+		return employeeId == that.employeeId && Double.compare(that.payrollDetails.basicSalary,  payrollDetails.basicSalary) == 0 && employeeName.equals(that.employeeName);
 	}
 }
