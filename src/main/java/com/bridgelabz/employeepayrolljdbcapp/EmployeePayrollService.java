@@ -97,7 +97,7 @@ public class EmployeePayrollService {
 		
 		EmployeePayrollData employeePayrollData = this.getEmployeePayrollData(name);
 		if(employeePayrollData != null)
-			employeePayrollData.employeeSalary = salary;
+			employeePayrollData.payrollDetails.basicSalary = salary;
 		
 	}	
 
@@ -109,7 +109,7 @@ public class EmployeePayrollService {
 		
 		EmployeePayrollData employeePayrollData = this.getEmployeePayrollData(name);
 		if(employeePayrollData != null)
-			employeePayrollData.employeeSalary = salary;		
+			employeePayrollData.payrollDetails.basicSalary = salary;		
 	}
 	
 	public boolean checkEmployeePayrollInSyncWithDB(String name) {
