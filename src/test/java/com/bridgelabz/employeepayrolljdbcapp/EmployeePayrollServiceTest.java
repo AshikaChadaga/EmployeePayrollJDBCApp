@@ -43,7 +43,7 @@ public class EmployeePayrollServiceTest
 		
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
-		Assert.assertEquals(3, employeePayrollData.size());
+		Assert.assertEquals(9, employeePayrollData.size());
 	}
 	
 	@Test 
