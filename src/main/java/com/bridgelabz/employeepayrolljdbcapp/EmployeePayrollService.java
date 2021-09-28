@@ -3,8 +3,6 @@ package com.bridgelabz.employeepayrolljdbcapp;
 import java.util.List;
 import java.util.Scanner;
 
-import com.bridgelabz.employeepayrolljdbcapp.EmployeePayrollException.ExceptionType;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -185,6 +183,14 @@ public class EmployeePayrollService {
 	public void addEmployeeToUpdatedDatabse(int id, String name, double salary, long phoneNumber, LocalDate start, String gender, int companyId) {
 
 		employeePayrollList.add(employeePayrollDBService.addEmployeeToUpdatedDatabase(id, name, salary, phoneNumber, start, gender, companyId));
+	}
+	
+	public void deleteEmployeeToPayroll(String name) throws EmployeePayrollException {
+		this.employeePayrollList = this.employeePayrollDBService.deleteEmployeeFromDatabase(name);
+	}
+
+	public int checkedRecordDeletedFromDatabase(String name) throws EmployeePayrollException {
+		return employeePayrollDBService.getEmployeeActiveStatus(name);
 	}
 
 	public static void main(String[] args) {
