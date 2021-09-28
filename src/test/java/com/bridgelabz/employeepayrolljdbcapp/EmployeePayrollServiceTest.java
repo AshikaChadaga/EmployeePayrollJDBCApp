@@ -188,4 +188,14 @@ public class EmployeePayrollServiceTest
 		
 	}
 	
+	@Test
+	public void givenEmployeePayroll_WhenDeleteRecord_ShouldeSyncWithDB(){
+		
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
+		employeePayrollService.deleteEmployeeToPayroll("Macy");
+		int result = employeePayrollService.checkedRecordDeletedFromDatabase("Macy");
+		Assert.assertEquals(0, result);
+	}
+	
 }
