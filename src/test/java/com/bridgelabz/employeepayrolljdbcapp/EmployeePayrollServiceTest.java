@@ -173,8 +173,10 @@ public class EmployeePayrollServiceTest
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
 		employeePayrollService.addEmployeeToPayroll(11, "Mark", 5000000.00, 1234567890, LocalDate.now(), "M", 1);
+		
 		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
-		Assert.assertEquals(10, employeePayrollData.size());
+		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Mark");
+		Assert.assertTrue(result);
 	}
 	
 	@Test
@@ -184,7 +186,8 @@ public class EmployeePayrollServiceTest
 		employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
 		employeePayrollService.addEmployeeToUpdatedDatabse(12, "Macy", 6000000.00, 1334567890, LocalDate.now(), "F", 2);
 		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
-		Assert.assertEquals(11, employeePayrollData.size());
+		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Macy");
+		Assert.assertTrue(result);
 		
 	}
 	
