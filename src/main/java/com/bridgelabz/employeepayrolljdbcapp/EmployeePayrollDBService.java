@@ -334,14 +334,12 @@ public class EmployeePayrollDBService {
 				if(resultSet.next())
 					employeeId = resultSet.getInt(1);
 			}
-			employeePayrollData = new EmployeePayrollData(employeeId, name, salary, startDate);
 			
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
 			try {
 				connection.rollback();
-				return employeePayrollData;
 			} catch (SQLException exception) {
 				throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.CONNECTION_FAILED, exception.getMessage());
 			}
